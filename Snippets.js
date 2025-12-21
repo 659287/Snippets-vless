@@ -2,10 +2,10 @@ import { connect } from 'cloudflare:sockets';
 
 let userID = '02ea78b1-528f-495a-bea5-9daf26e0efa6'; // 替换自己的UUID
 
-let proxyIP = 'proxyip.cmliussss.net'; 
+let proxyIP = 'ProxyIP.CMLiussss.net'; 
 
 // 新增 - 预设优选域名列表
-const preferredDomains = ['visa.com.hk', 'ip.sb', 'icook.tw', 'shopify.com', 'skk.moe', 'cdn.tzpro.xyz', 'bestcf.top', 'cf.090227.xyz', 'cf.zhetengsha.eu.org', 'baipiao.cmliussss.abrdns.com'];
+const preferredDomains = ['ip.sb', 'japan.com', 'malaysia.com', 'www.visa.com.hk', 'www.gov.se', 'www.digitalocean.com', 'www.shopify.com', 'www.ipget.net', 'www.hugedomains.com', 'www.udacity.com', 'www.okcupid.com', 'www.boba88slot.com', 'www.zsu.gov.ua', 'www.d-555.com', 'mfa.gov.ua', 'saas.sin.fan', 'store.ubi.com', 'cf.130519.xyz', 'cf.008500.xyz', 'cf.090227.xyz', 'cf.877774.xyz', 'cdns.doon.eu.org', 'cf.zhetengsha.eu.org', 'download.cloudflare-dl.cnae.top', 'download.cloudflare-dl.byoip.top', 'cm.cloudflare.cnae.top', 'ct.cloudflare.cnae.top', 'ct.cloudflare.byoip.top', 'cu.cloudflare.byoip.top', 'cm.cloudflare.byoip.top', 'ct.877774.xyz', 'cmcc.877774.xyz', 'cu.877774.xyz', 'asia.877774.xyz', 'na.877774.xyz', 'vercel.001315.xyz', 'cdn.2020111.xyz', 'cf-cname.xingpingcn.top', 'shopify.com', 'time.is', 'skk.moe', 'www.visa.com.tw', 'www.visa.co.jp', 'www.visakorea.com', 'www.whatismyip.com', 'www.4chan.org', 'www.glassdoor.com', 'sub.danfeng.eu.org', 'cu.cloudflare.cnae.top', 'cnamefuckxxs.yuchen.icu', 'checkout.shopify.com', 'bestcf.top', 'www.visa.com', 'www.visa.com.sg', 'www.gco.gov.qa', 'www.gov.ua', 'www.csgo.com', 'www.whoer.net', 'www.udemy.com', 'gur.gov.ua', 'visa.com.hk', 'icook.tw', 'cdn.tzpro.xyz', 'baipiao.cmliussss.abrdns.com'];
 
 // 解析 proxyIP 为 host 和 port（初始默认值）
 let proxyConfig = { proxyHost: '', proxyPort: null };
