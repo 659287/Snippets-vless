@@ -2,7 +2,7 @@ import { connect } from 'cloudflare:sockets';
 
 let userID = '02ea78b1-528f-495a-bea5-9daf26e0efa6'; // 替换自己的UUID
 
-let proxyIP = 'ProxyIP.CMLiussss.net'; 
+let proxyIP = 'ProxyIP.CMLiussss.net'; //210.61.97.241:81#TW
 
 // 新增 - 预设优选域名列表
 const preferredDomains = ['www.udacity.com', 'www.shopify.com', 'www.gov.se', 'www.visa.com.hk', 'checkout.shopify.com', 'www.glassdoor.com', 'www.visa.co.jp', 'baipiao.cmliussss.abrdns.com', 'www.visa.com.sg', 'russia.com', 'singapore.com', 'www.visakorea.com', 'malaysia.com', 'www.whatismyip.com', 'www.ipget.net', 'japan.com', 'www.udemy.com', 'log.bpminecraft.com', 'time.is', 'icook.hk', 'icook.tw', 'www.gov.ua', 'ip.sb', 'www.okcupid.com', 'www.whoer.net', 'www.digitalocean.com', 'visa.com.hk', 'www.4chan.org', 'www.csgo.com', 'shopify.com', 'www.visa.com', 'www.visa.com.tw', 'fbi.gov', 'gur.gov.ua', 'skk.moe', 'www.hugedomains.com'];
