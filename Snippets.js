@@ -6,12 +6,40 @@ let proxyIP = 'ProxyIP.CMLiussss.net'; //210.61.97.241:81#TW
 
 // 新增 - 预设优选域名列表
 const preferredDomains = ['www.udacity.com', 'www.shopify.com', 'www.gov.se', 'www.visa.com.hk', 'checkout.shopify.com', 'www.glassdoor.com', 'www.visa.co.jp', 'baipiao.cmliussss.abrdns.com', 'www.visa.com.sg', 'russia.com', 'singapore.com', 'www.visakorea.com', 'malaysia.com', 'www.whatismyip.com', 'www.ipget.net', 'japan.com', 'www.udemy.com', 'log.bpminecraft.com', 'time.is', 'icook.hk', 'icook.tw', 'www.gov.ua', 'ip.sb', 'www.okcupid.com', 'www.whoer.net', 'www.digitalocean.com', 'visa.com.hk', 'www.4chan.org', 'www.csgo.com', 'shopify.com', 'www.visa.com', 'www.visa.com.tw', 'fbi.gov', 'gur.gov.ua', 'skk.moe', 'www.hugedomains.com'];
-// const preferredDomains = ['www.shopify.com', 'www.udacity.com', 'www.boba88slot.com', 'mfa.gov.ua', 'saas.sin.fan', 'store.ubi.com', 'cf.130519.xyz', 'cf.008500.xyz', 'cf.090227.xyz', 'cm.cloudflare.cnae.top', 'ct.cloudflare.cnae.top', 'ct.cloudflare.byoip.top', 'cu.cloudflare.byoip.top', 'cu.877774.xyz', 'cf-cname.xingpingcn.top', 'sub.danfeng.eu.org', 'jp.111000.cc.cd', 'freeyx.cloudflare88.eu.org', 'malaysia.com', 'www.visa.com.hk', 'www.gov.se', 'www.hugedomains.com', 'www.okcupid.com', 'www.d-555.com', 'cdns.doon.eu.org', 'cf.zhetengsha.eu.org', 'cmcc.877774.xyz', 'cdn.2020111.xyz', 'time.is', 'www.visa.co.jp', 'www.4chan.org', 'bestcf.top', 'www.visa.com', 'www.visa.com.sg', 'www.udemy.com', 'visa.com.hk', 'icook.tw', 'bestcf.030101.xyz', 'russia.com', 'singapore.com']; #bgs
+// const preferredDomains = ['cm.cloudflare.byoip.top:443','cf-cname.xingpingcn.top:443','freeyx.cloudflare88.eu.org:443','cu.cloudflare.byoip.top:443','cf.130519.xyz:443','cu.cloudflare.cnae.top:443','ct.cloudflare.cnae.top:443','ct.cloudflare.byoip.top:443','jp.111000.cc.cd:443','cm.cloudflare.cnae.top:443','cdns.doon.eu.org:443','mfa.gov.ua:443','cf.090227.xyz:443','cm.cloudflare.byoip.top:8443','cf-cname.xingpingcn.top:8443','freeyx.cloudflare88.eu.org:8443','cu.cloudflare.byoip.top:8443','cf.130519.xyz:8443','cu.cloudflare.cnae.top:8443','ct.cloudflare.cnae.top:8443','ct.cloudflare.byoip.top:8443','jp.111000.cc.cd:8443','cm.cloudflare.cnae.top:8443','cdns.doon.eu.org:8443','mfa.gov.ua:8443','cf.090227.xyz:8443'];
 
-// 解析 proxyIP 为 host 和 port（初始默认值）
+// Nginx 伪装页面 HTML
+const nginxHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+`;
+
 let proxyConfig = { proxyHost: '', proxyPort: null };
 function parseProxyIP(inputProxyIP) {
-    proxyConfig = { proxyHost: '', proxyPort: null }; // 重置
+    proxyConfig = { proxyHost: '', proxyPort: null };
     if (inputProxyIP) {
         const parts = inputProxyIP.split(':');
         proxyConfig.proxyHost = parts[0].trim();
@@ -24,7 +52,7 @@ function parseProxyIP(inputProxyIP) {
     }
 }
 
-parseProxyIP(proxyIP); // 恢复初始解析默认 proxyIP
+parseProxyIP(proxyIP);
 
 if (!isValidUUID(userID)) {
     throw new Error('uuid is not valid');
@@ -33,12 +61,10 @@ if (!isValidUUID(userID)) {
 export default {
     async fetch(request, env, ctx) {
         try {
-            // 检查 URL 路径是否包含 /proxyip=IP:port，动态覆盖 proxyIP
             const url = new URL(request.url);
-            let dynamicProxyIP = proxyIP; // 默认使用硬编码 proxyIP
+            let dynamicProxyIP = proxyIP;
             let pathUUID = null;
 
-            // 检查路径是否包含 UUID
             if (url.pathname.startsWith('/proxyip=')) {
                 const parts = url.pathname.split('/');
                 if (parts.length >= 3) {
@@ -47,17 +73,17 @@ export default {
                     parseProxyIP(dynamicProxyIP);
                 }
             } else if (url.pathname.startsWith('/') && url.pathname.length > 1) {
-                pathUUID = url.pathname.substring(1); // 提取 / 后面的内容作为 UUID
+                pathUUID = url.pathname.substring(1);
             }
 
             const upgradeHeader = request.headers.get('Upgrade');
             if (!upgradeHeader || upgradeHeader !== 'websocket') {
                 if (url.pathname === '/') {
-                    // 根路径返回提示
-                    return new Response('恭喜你快成功了，快去添加 UUID 吧', {
+                    // 替换为真实的 Nginx 伪装页
+                    return new Response(nginxHTML, {
                         status: 200,
                         headers: {
-                            'Content-Type': 'text/plain;charset=utf-8'
+                            'Content-Type': 'text/html;charset=utf-8'
                         }
                     });
                 } else if (pathUUID && pathUUID === userID) {
@@ -129,14 +155,12 @@ async function vlessOverWSHandler(request) {
             } = processVlessHeader(chunk, userID);
             if (hasError) {
                 throw new Error(message);
-                return;
             }
             if (isUDP) {
                 if (portRemote === 53) {
                     isDns = true;
                 } else {
                     throw new Error('UDP proxy only enable for DNS which is port 53');
-                    return;
                 }
             }
             const vlessResponseHeader = new Uint8Array([vlessVersion[0], 0]);
@@ -478,9 +502,13 @@ function getVLESSConfig(userID, currentHost) {
 
     preferredDomains.forEach((domain, index) => {
         const aliasIndex = (index + 1).toString().padStart(2, '0');
-        const alias = `xiaolin-Snippets_${aliasIndex}`;
+        const alias = `TW_${aliasIndex}`;
+        
+        // 修复：自动识别 domain 字符串中是否包含端口，如果不包含则默认 443
+        const finalAddr = domain.includes(':') ? domain : `${domain}:443`;
+
         const vlessUri = 
-            `${protocol}://${userID}@${domain}:443` +
+            `${protocol}://${userID}@${finalAddr}` +
             `?encryption=none&security=tls&sni=${currentHost}&fp=chrome&type=ws&host=${currentHost}&path=%2F%3Fed%3D2048#${alias}`;
         
         allVlessUris.push(vlessUri);
