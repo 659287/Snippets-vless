@@ -502,7 +502,7 @@ function getVLESSConfig(userID, currentHost) {
 
     preferredDomains.forEach((domain, index) => {
         const aliasIndex = (index + 1).toString().padStart(2, '0');
-        const alias = `US_${aliasIndex}`;
+        const alias = `US-${aliasIndex}`;
         
         // 修复：自动识别 domain 字符串中是否包含端口，如果不包含则默认 443
         const finalAddr = domain.includes(':') ? domain : `${domain}:443`;
